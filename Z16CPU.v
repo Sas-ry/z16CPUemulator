@@ -5,7 +5,20 @@ module Z16CPU(
 
   // プログラムカウンタ
   reg   [15:0] r_pc;
+
   wire  [15:0] w_instr;
+  // RDアドレス信号線
+  wire  [15:0] w_rd_addr;
+  // RS1アドレス信号線
+  wire  [15:0] w_rs1_addr;
+  // 即値信号線
+  wire  [15:0] w_imm;
+  // レジスタ書き込み有効化信号線
+  wire         w_rd_wen;
+  // メモリ書き込み有効化信号線
+  wire         w_mem_wen;
+  // ALU演算制御信号線
+  wire  [3:0]  w_alu_ctrl;
 
   always @(posedge i_clk) begin
     if(i_rst) begin
@@ -21,6 +34,17 @@ module Z16CPU(
     // プログラムカウンタを命令メモリに接続
     .i_addr   (r_pc),
     .o_instr  (w_instr)
+  );
+
+  // デコーダ
+  Z16Decoder Decoder(
+    .i_instr    (w_instr),
+    .o_rd_addr  (w_rd_addr),
+    .o_rs1_addr (w_rs1_addr),
+    .o_imm      (w_imm),
+    .o_rd_wen   (w_rd_wen),
+    .o_mem_wen  (w_mem_wen),
+    .o_alu_ctrl (w_alu_ctrl)
   );
 
   // データメモリ
