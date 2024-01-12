@@ -10,7 +10,7 @@ module Z16CPU(
   // RDアドレス信号線
   wire  [15:0] w_rd_addr;
   // RS1アドレス信号線
-  wire  [15:0] w_rs1_addr;
+  wire  [3:0] w_rs1_addr;
   // 即値信号線
   wire  [15:0] w_imm;
   // レジスタ書き込み有効化信号線
@@ -19,6 +19,9 @@ module Z16CPU(
   wire         w_mem_wen;
   // ALU演算制御信号線
   wire  [3:0]  w_alu_ctrl;
+
+  // RS1データ信号線
+  wire  [15:0] w_rs1_data;
 
   always @(posedge i_clk) begin
     if(i_rst) begin
