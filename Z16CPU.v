@@ -47,6 +47,18 @@ module Z16CPU(
     .o_alu_ctrl (w_alu_ctrl)
   );
 
+  // レジスタファイル
+  Z16RegisterFile RegFile(
+    .i_clk  (i_cli),
+    .i_rs1_addr (w_rs1_addr),
+    .o_rs1_data (w_rs1_data),
+    .i_rs2_addr (),
+    .o_rs2_data (),
+    .i_rd_data  (),
+    .i_rd_addr  (),
+    .i_rd_wen   ()
+  );
+
   // データメモリ
   Z16DataMem DataMem(
     .i_clk  (),
