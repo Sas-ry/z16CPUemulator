@@ -8,7 +8,7 @@ module Z16CPU(
 
   wire  [15:0] w_instr;
   // RDアドレス信号線
-  wire  [15:0] w_rd_addr;
+  wire  [3:0] w_rd_addr;
   // RS1アドレス信号線
   wire  [3:0] w_rs1_addr;
   // 即値信号線
@@ -38,7 +38,7 @@ module Z16CPU(
   end
 
   // 命令メモリ
-  Z16InstrMem InstrMem(
+  Z16InstrMemory InstrMem(
     // プログラムカウンタを命令メモリに接続
     .i_addr   (r_pc),
     .o_instr  (w_instr)
@@ -62,9 +62,9 @@ module Z16CPU(
     .o_rs1_data (w_rs1_data),
     .i_rs2_addr (),
     .o_rs2_data (),
-    .i_rd_data  (),
-    .i_rd_addr  (),
-    .i_rd_wen   ()
+    .i_rd_data  (w_mem_rdata),
+    .i_rd_addr  (w_rd_addr),
+    .i_rd_wen   (w_rd_wen)
   );
 
   // ALU
@@ -76,7 +76,7 @@ module Z16CPU(
   );
 
   // データメモリ
-  Z16DataMem DataMem(
+  Z16DataMemory DataMem(
     .i_clk  (i_clk),
     .i_addr (w_alu_data),
     .i_wen  (w_mem_wen),

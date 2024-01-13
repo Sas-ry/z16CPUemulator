@@ -8,7 +8,7 @@ module Z16Decoder(
   // RS1アドレス出力
   output wire [3:0]  o_rs1_addr,
   // 即値出力
-  output wire [15:0] o_imm
+  output wire [15:0] o_imm,
   // レジスタ書き込み有効化信号
   output wire        o_rd_wen,
   // メモリ書き込み有効化信号
