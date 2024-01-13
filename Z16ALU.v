@@ -4,7 +4,7 @@ module Z16ALU(
   // データ入力2
   input wire  [15:0]  i_data_b,
   // 制御信号入力
-  input wire  [3:0]   i_curl,
+  input wire  [3:0]   i_ctrl,
   // データ出力
   output wire [15:0]  o_data
 );
@@ -12,10 +12,10 @@ module Z16ALU(
   function [15:0] alu;
     input [15:0]  i_data_a;
     input [15:0]  i_data_b;
-    input [3:0]   i_curl;
+    input [3:0]   i_ctrl;
 
     begin
-      case(i_curl)
+      case(i_ctrl)
         4'h0 : alu = i_data_b + i_data_a;
         4'h1 : alu = i_data_b - i_data_a;
         4'h2 : alu = i_data_b * i_data_a;
@@ -30,5 +30,5 @@ module Z16ALU(
     end
   endfunction
 
-  assign o_data = alu(i_data_a, i_data_b, i_curl);
+  assign o_data = alu(i_data_a, i_data_b, i_ctrl);
 endmodule
