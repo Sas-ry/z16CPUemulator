@@ -23,6 +23,11 @@ module Z16CPU(
   // RS1データ信号線
   wire  [15:0] w_rs1_data;
 
+  // ALUの演算結果
+  wire  [15:0] w_alu_data;
+  // メモリからの読み出しデータ
+  wire  [15:0] w_mem_rdata;
+
   always @(posedge i_clk) begin
     if(i_rst) begin
       // リセット
@@ -62,13 +67,21 @@ module Z16CPU(
     .i_rd_wen   ()
   );
 
+  // ALU
+  Z16ALU ALU(
+    .i_data_a   (w_rs1_data),
+    .i_data_b   (w_imm),
+    .i_ctrl     (w_alu_ctrl),
+    .o_data     (w_alu_data)
+  );
+
   // データメモリ
   Z16DataMem DataMem(
-    .i_clk  (),
-    .i_addr (),
-    .i_wen  (),
+    .i_clk  (i_clk),
+    .i_addr (w_alu_data),
+    .i_wen  (w_mem_wen),
     .i_data (),
-    .o_data ()
+    .o_data (w_mem_rdata)
   );
 
 endmodule
