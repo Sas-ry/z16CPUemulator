@@ -22,6 +22,8 @@ module Z16CPU(
 
   // RS1データ信号線
   wire  [15:0] w_rs1_data;
+  // RS2データ信号線
+  wire  [15:0] w_rs2_data;
 
   // ALUの演算結果
   wire  [15:0] w_alu_data;
@@ -49,6 +51,7 @@ module Z16CPU(
     .i_instr    (w_instr),
     .o_rd_addr  (w_rd_addr),
     .o_rs1_addr (w_rs1_addr),
+    .o_rs2_addr (w_rs2_addr),
     .o_imm      (w_imm),
     .o_rd_wen   (w_rd_wen),
     .o_mem_wen  (w_mem_wen),
