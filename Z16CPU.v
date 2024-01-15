@@ -19,12 +19,16 @@ module Z16CPU(
   wire         w_mem_wen;
   // ALU演算制御信号線
   wire  [3:0]  w_alu_ctrl;
+  // オペコード信号線
+  wire  [3:0]  w_opcode;
 
   // RS1データ信号線
   wire  [15:0] w_rs1_data;
   // RS2データ信号線
   wire  [15:0] w_rs2_data;
+  wire  [15:0] w_rd_data;
 
+  wire  [15:0] w_data_b;
   // ALUの演算結果
   wire  [15:0] w_alu_data;
   // メモリからの読み出しデータ
@@ -49,6 +53,7 @@ module Z16CPU(
   // デコーダ
   Z16Decoder Decoder(
     .i_instr    (w_instr),
+    .o_opecode  (w_opcode),
     .o_rd_addr  (w_rd_addr),
     .o_rs1_addr (w_rs1_addr),
     .o_rs2_addr (w_rs2_addr),
@@ -59,21 +64,23 @@ module Z16CPU(
   );
 
   // レジスタファイル
+  assign w_rd_data = (w_opcode[3:0] == 4'hA) ? w_mem_rdata : w_alu_data;
   Z16RegisterFile RegFile(
-    .i_clk  (i_cli),
+    .i_clk  (i_clk),
     .i_rs1_addr (w_rs1_addr),
     .o_rs1_data (w_rs1_data),
-    .i_rs2_addr (),
-    .o_rs2_data (),
-    .i_rd_data  (w_mem_rdata),
+    .i_rs2_addr (w_rs2_addr),
+    .o_rs2_data (w_rs2_data),
+    .i_rd_data  (w_rd_data),
     .i_rd_addr  (w_rd_addr),
     .i_rd_wen   (w_rd_wen)
   );
 
   // ALU
+  assign w_data_b = (w_opcode <= 8'h8) ? w_rs2_data : w_imm;
   Z16ALU ALU(
     .i_data_a   (w_rs1_data),
-    .i_data_b   (w_imm),
+    .i_data_b   (w_data_b),
     .i_ctrl     (w_alu_ctrl),
     .o_data     (w_alu_data)
   );
