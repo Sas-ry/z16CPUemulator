@@ -53,7 +53,7 @@ module Z16CPU(
   // デコーダ
   Z16Decoder Decoder(
     .i_instr    (w_instr),
-    .o_opecode  (w_opcode),
+    .o_opcode  (w_opcode),
     .o_rd_addr  (w_rd_addr),
     .o_rs1_addr (w_rs1_addr),
     .o_rs2_addr (w_rs2_addr),
@@ -90,7 +90,7 @@ module Z16CPU(
     .i_clk  (i_clk),
     .i_addr (w_alu_data),
     .i_wen  (w_mem_wen),
-    .i_data (),
+    .i_data (w_rs2_data),
     .o_data (w_mem_rdata)
   );
 
