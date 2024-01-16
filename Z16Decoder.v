@@ -2,7 +2,7 @@ module Z16Decoder(
   // 命令入力
   input wire  [15:0] i_instr,
   // オペコード出力
-  output wire [3:0]  o_opecode,
+  output wire [3:0]  o_opcode,
   // RDアドレス出力
   output wire [3:0]  o_rd_addr,
   // RS1アドレス出力
@@ -19,7 +19,7 @@ module Z16Decoder(
   output wire [3:0]  o_alu_ctrl
 );
 
-  assign o_opecode  = i_instr[3:0];
+  assign o_opcode  = i_instr[3:0];
   assign o_rd_addr  = i_instr[7:4];
   assign o_rs1_addr = get_rs1_addr(i_instr);
   assign o_rs2_addr = i_instr[15:12];
@@ -44,8 +44,10 @@ module Z16Decoder(
   begin
     case(i_instr[3:0])
       4'h9    : get_imm = {{8{i_instr[15]}}, i_instr[15:8]};
-      4'hA    : get_imm = {{12{i_instr[15]}}, i_instr[15:12] };
+      4'hA    : get_imm = {{12{i_instr[15]}}, i_instr[15:12]};
       4'hB    : get_imm = {{12{i_instr[7]}}, i_instr[7:4]};
+      4'hC    : get_imm = {{12{i_instr[15]}}, i_instr[15:12]};
+      4'hD    : get_imm = {{12{i_instr[15]}}, i_instr[15:12]};
       default : get_imm = 16'h0000;
     endcase
   end
@@ -56,6 +58,8 @@ module Z16Decoder(
     input [15:0] i_instr;
   begin
     if(i_instr[3:0] <= 4'hA) begin
+      get_rd_wen = 1'b1;
+    end else if((i_instr[3:0] == 4'hC) || (i_instr[3:0] == 4'hD)) begin
       get_rd_wen = 1'b1;
     end else begin
       get_rd_wen = 1'b0;
@@ -76,10 +80,14 @@ module Z16Decoder(
   endfunction
 
   // ALU演算制御信号取得
-  function get_alu_ctrl;
+  function [3:0] get_alu_ctrl;
     input [15:0] i_instr;
   begin
-    get_alu_ctrl = 4'h0;
+    if(i_instr[3:0] <= 4'h8) begin
+      get_alu_ctrl = i_instr[3:0];
+    end else begin
+      get_alu_ctrl = 4'h0;
+    end
   end
   endfunction
 
