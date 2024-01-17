@@ -33,7 +33,20 @@ module Z16Decoder(
   begin
     case(i_instr[3:0])
       4'h9    : get_rs1_addr  = i_instr[7:4];
+      4'hE    : get_rs1_addr  = {2'b00, i_instr[5:4]};
+      4'hF    : get_rs1_addr  = {2'b00, i_instr[5:4]};
       default : get_rs1_addr  = i_instr[11:8];
+    endcase
+  end
+  endfunction
+
+  function [3:0] get_rs2_addr;
+    input [15:0] i_instr;
+  begin
+    case(i_instr[3:0])
+      4'hE    : get_rs2_addr  = {2'b00, i_instr[7:6]};
+      4'hF    : get_rs2_addr  = {2'b00, i_instr[7:6]};
+      default : get_rs2_addr  = i_instr[15:12];
     endcase
   end
   endfunction
