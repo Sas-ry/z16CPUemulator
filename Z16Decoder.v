@@ -61,6 +61,8 @@ module Z16Decoder(
       4'hB    : get_imm = {{12{i_instr[7]}}, i_instr[7:4]};
       4'hC    : get_imm = {{12{i_instr[15]}}, i_instr[15:12]};
       4'hD    : get_imm = {{12{i_instr[15]}}, i_instr[15:12]};
+      4'hE    : get_imm = {{8{i_instr[15]}}, i_instr[15:8]};
+      4'hF    : get_imm = {{8{i_instr[15]}}, i_instr[15:8]};
       default : get_imm = 16'h0000;
     endcase
   end
