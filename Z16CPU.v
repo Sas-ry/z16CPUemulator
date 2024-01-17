@@ -1,6 +1,7 @@
 module Z16CPU(
   input wire  i_clk,
-  input wire  i_rst
+  input wire  i_rst,
+  output reg  [5:0] o_led
 );
 
   // プログラムカウンタ
@@ -117,5 +118,17 @@ module Z16CPU(
     .i_data (w_rs2_data),
     .o_data (w_mem_rdata)
   );
+
+  // MMIO
+  always @(posedge i_clk) begin
+    // LED
+    if(i_rst) begin
+      o_led <= 6'b000000;
+    end else if(w_mem_wen && (w_alu_data == 16'h007A)) begin
+      o_led <= w_rs2_data[5:0];
+    end else begin
+      o_led <= o_led;
+    end
+  end
 
 endmodule
